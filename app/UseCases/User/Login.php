@@ -4,6 +4,9 @@ namespace App\UseCases\User;
 
 use Throwable;
 use App\UseCases\BaseUseCase;
+//TODO: nomear create_token para CreateToken pois não segue o padrão PascalCase
+// porem nao tem a necessidade do alias
+// ao inves de chamar a repositorio diretamente aqui, criar um useCase App\UseCases\Token\CreateToken que utilize esse repositorio
 use App\Repositories\Token\Create as create_token;
 
 class Login extends BaseUseCase

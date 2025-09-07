@@ -6,6 +6,7 @@ use Throwable;
 use App\UseCases\BaseUseCase;
 use App\Repositories\User\Find;
 
+//TODO: nomear show para Show pois não segue o padrão PascalCase
 class show extends BaseUseCase
 {
     /**
@@ -31,6 +32,7 @@ class show extends BaseUseCase
 
     public function __construct(string $a, string $b)
     {
+        //TODO: nomes fora do padrão, usar nomes mais descritivos
         $this->a = $a;
         $this->b = $b;
     }

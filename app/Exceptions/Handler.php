@@ -133,7 +133,7 @@ class Handler extends ExceptionHandler
             );
         }
 
-        dump($exception);
+        dump($exception); // TODO: remover dump
 
         $response = new DefaultResponse(
             null,
@@ -187,6 +187,7 @@ class Handler extends ExceptionHandler
      */
     protected function applyUuidRegexPattern(string $path): string
     {
+        // TODO: talvez mover o pattern para o arquivo de configuração, ex: config/patterns.php
         $pattern = '/[A-Fa-f0-9]{8}\-?[A-Fa-f0-9]{4}\-?[A-Fa-f0-9]{4}\-?[A-Fa-f0-9]{4}\-?[A-Fa-f0-9]{12}/';
 
         return str_replace(['/', '-'], '_', preg_replace($pattern, 'UUID', $path));

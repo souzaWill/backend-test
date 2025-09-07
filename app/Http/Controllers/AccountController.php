@@ -14,6 +14,7 @@ use App\Http\Resources\Account\ShowResource;
 
 class AccountController extends Controller
 {
+    //TODO: esses docs podem induzir a erro, pois esssa função não ativa a conta, apenas registra a conta no sistema, com o status BLOCK, apos isso e necessario chamar a rota de active para ativar a conta
     /**
      * Ativa a conta bancária
      *

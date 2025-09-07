@@ -77,6 +77,7 @@ class Update extends BaseDomain
      */
     protected function cryptPassword(?string $password): void
     {
+        // TODO: remover a função de hash direta, usar injeção de dependência ex: bind PasswordHasherInterface -> LaravelPasswordHasher 
         $this->password = !is_null($password) ? Hash::make($password) : null;
     }
 
@@ -85,7 +86,7 @@ class Update extends BaseDomain
      *
      * @return void
      */
-    protected function checkEmail(): void
+    protected function checkEmail(): voidxw
     {
         if (is_null($this->email)) {
             return;
@@ -108,6 +109,7 @@ class Update extends BaseDomain
         if (is_null($this->type)) {
             return;
         }
+        // TODO: codigo duplicado, existe a mesma validacao em User/Create.php, considerar o uso de ValueObjects ou um Enum
         if (!in_array($this->type, ['USER', 'VIRTUAL', 'MANAGER'])) {
             throw new InternalErrorException(
                 'Não é possível adicionar o tipo informado',

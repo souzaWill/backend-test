@@ -40,7 +40,8 @@ class CanUseExternalId extends BaseRepository
     {
         $user = $this->builder
             ->where('external_id', $this->externalId)
-            ->first();
+            ->first(); //TODO: usar exists, que é mais performático pois nao precisa trazer o registro completo
+            // TODO: porem o ideal seria a abstração disso na BaseRepository
 
         return is_null($user);
     }

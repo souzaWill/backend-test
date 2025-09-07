@@ -39,10 +39,12 @@ class Find extends Gateway
         if (is_null($account)) {
             throw new InternalErrorException(
                 'ACCOUNT_NOT_FOUND',
-                161001001
+                161001001 //TODO: criar constante para esse codigo de erro ou erro persoalizado
             );
         }
 
+        //TODO: o nome dessa função esta errado, pois oque ela faz de verdade e setar o externalId
+        //tambem moveria a busca do external_id para app/UseCases/Account/Show.php, e passaria via injecao de dependencia
         $this->externalId = $account['external_id'];
     }
 
@@ -66,6 +68,7 @@ class Find extends Gateway
         $this->findAccountData();
         $url = $this->requestUrl();
 
+        //TODO: o mais adequado para o nome da variavel seria $response
         $request = $this->sendRequest(
             method: 'get',
             url:    $url,

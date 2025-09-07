@@ -6,6 +6,8 @@ use App\Traits\Logger;
 use App\Exceptions\PolicyException;
 use Illuminate\Support\Facades\Auth;
 
+//TODO: essa classe mistura a verificação de autorização com logging, talvez fosse melhor separar essas responsabilidades
+//usar Gate::define('manager-or-owner') para a logica de permissão, e nessa classe Gate::denies('manager-or-owner', $ownerResourceId), caso positivo chamaria a deny
 class BasePolicy
 {
     use Logger;
@@ -98,6 +100,8 @@ class BasePolicy
     protected function isManagerOrOwnerResource(string $ownerResourceId): void
     {
         $user = Auth::user();
+
+        //TODO: ifs anihilados deixam a logica mas complexa do que ela realmente é, um early return deixaria mais claro
         if ($ownerResourceId !== $user->id) {
             if (!is_null($user) && $user->type !== 'MANAGER') {
                 $this->deny(

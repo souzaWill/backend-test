@@ -41,6 +41,8 @@ class CanUseEmail extends BaseRepository
         $user = $this->builder
             ->where('email', $this->email)
             ->first();
+            //TODO: usar exists, que é mais performático pois nao precisa trazer o registro completo
+            // TODO: porem o ideal seria a abstração disso na BaseRepository
 
         return is_null($user);
     }

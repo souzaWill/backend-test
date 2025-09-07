@@ -34,6 +34,7 @@ class Update extends BaseDomain
     public function handle(): self
     {
         // Nenhuma validação necessária
+        // TODO: classe sem efeito, remover ou implementar lógica
 
         return $this;
     }

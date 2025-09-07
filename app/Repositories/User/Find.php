@@ -46,6 +46,9 @@ class Find extends BaseRepository
      */
     public function handle(): ?array
     {
+        //TODO: usar o $this->builder o acoplamento entre a repository o eloquento fica maior ainda
+        // assim dificulta a troca de implementação, testabilidade, etc... 
+        // como solução recomendaria uma abstração dessa funcão na BaseRepository
         $this->builder->where('company_id', $this->companyId);
 
         return $this->find($this->id);

@@ -39,6 +39,7 @@ class UserController extends Controller
      */
     public function register(RegisterRequest $request): JsonResponse
     {
+        //TODO: sugestão CreateFirstUserParams poderia ter uma função chamada fromArray CreateFirstUserParams::fromArray($request->validated());
         $params = new CreateFirstUserParams(
             $request->company_name,
             $request->company_document_number,
@@ -69,6 +70,8 @@ class UserController extends Controller
      */
     public function login(): JsonResponse
     {
+        //TODO: entendo o uso da autenticação basic por ser um teste, mas ela gera problemas de segurança em uma api que lida com informações sensíveis 
+        //TODO: talvez remova isso
         $response = (new Login(Auth::id()))->handle();
 
         return $this->response(
@@ -89,7 +92,8 @@ class UserController extends Controller
      */
     public function index(IndexRequest $request): JsonResponse
     {
-        $response = (new Index(
+        //TODO: o nome do dominio Index me parece estranho para um caso de uso, talvez ListUsers ou ListUser seja mais apropriado
+        $response = (new Index( 
             Auth::user()->company_id,
             $request->name,
             $request->email,
@@ -98,7 +102,7 @@ class UserController extends Controller
 
         return $this->response(
             new DefaultResponse(
-                new IndexCollectionResource($response)
+                new IndexCollectionResource($response) //TODO: UserCollectionResource me parece mais apropriado
             )
         );
     }
@@ -130,6 +134,7 @@ class UserController extends Controller
      */
     public function create(CreateRequest $request): JsonResponse
     {
+        //TODO: sugestão criar função fromArray
         $params = new CreateParams(
             Auth::user()->company_id,
             $request->name,
@@ -157,6 +162,7 @@ class UserController extends Controller
      */
     public function update(string $id, UpdateRequest $request): JsonResponse
     {
+        //TODO: sugestão criar função fromArray
         $params = new UpdateParams(
             $id,
             Auth::user()->company_id,

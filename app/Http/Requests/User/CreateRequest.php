@@ -18,7 +18,7 @@ class CreateRequest extends FormRequest
             'name'            => 'required',
             'email'           => 'required|email',
             'password'        => 'required',
-            'type'            => 'required|in:USER,VIRTUAL,MANAGER'
+            'type'            => 'required|in:USER,VIRTUAL,MANAGER' //TODO: poderia ser um enum, pois esses tipos estão espalhados pelo sistema
         ];
     }
 }

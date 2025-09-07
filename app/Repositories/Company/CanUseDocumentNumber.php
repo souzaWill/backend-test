@@ -40,7 +40,8 @@ class CanUseDocumentNumber extends BaseRepository
     {
         $user = $this->builder
             ->where('document_number', $this->documentNumber)
-            ->first();
+            ->first();  //TODO: usar exists, que é mais performático pois nao precisa trazer o registro completo
+            // TODO: porem o ideal seria a abstração disso na BaseRepository
 
         return is_null($user);
     }

@@ -52,11 +52,13 @@ class Register extends BaseUseCase
      */
     protected function findUser(): void
     {
+        // TODO: usar injeção de dependência ao invés de instanciar diretamente
         $user = (new Find($this->userId, $this->companyId))->handle();
         if (is_null($user)) {
+            // TODO: Criar uma exception específica para usuário não encontrado
             throw new InternalErrorException(
                 'USER_NOT_FOUND',
-                146001001
+                146001001 // usar constante ou melhor ainda seria um uma exception específica ex: UserNotFoundException ja definindo o codigo
             );
         }
 
@@ -93,6 +95,7 @@ class Register extends BaseUseCase
     public function handle(): void
     {
         try {
+            //TODO: usar transações para garantir a integridade, caso falhe em algum ponto, desfazer o que ja foi feito
             $this->findUser();
             $this->register();
             $this->store();

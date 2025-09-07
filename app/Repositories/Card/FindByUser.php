@@ -31,6 +31,7 @@ class FindByUser extends BaseRepository
         parent::__construct();
     }
 
+    //TODO: essa função nao está sendo chamada em lugar nenhum
     /**
      * Join com accounts
      *
@@ -53,7 +54,11 @@ class FindByUser extends BaseRepository
      */
     public function handle(): ?array
     {
+        //TODO: usar o $this->builder o acoplamento entre a repository o eloquento fica maior ainda
+        // assim dificulta a troca de implementação, testabilidade, etc... 
+        // como solução recomendaria uma abstração dessa funcão na BaseRepository
         $this->builder->where('accounts.user_id', $this->userId);
+        //TODO: faltou chamar o joinAccount aqui
 
         return $this->first(['cards.*']);
     }

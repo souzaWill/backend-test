@@ -30,6 +30,6 @@ class Account extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id'); //TODO: nesse caso não é necessário especificar as chaves estrangeiras, pois seguem o padrão do Laravel
     }
 }

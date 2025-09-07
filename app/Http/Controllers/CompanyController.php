@@ -43,10 +43,17 @@ class CompanyController extends Controller
      */
     public function update(UpdateRequest $request): JsonResponse
     {
+        //TODO: variaveis fugindo do padrao em ingles utilizado no projeto
+        //TODO: chamando o dominio direto na controller, fugindo do padrao de usar o usecase
         $dominio = (new UpdateDomain(
             Auth::user()->company_id,
             $request->name,
         ))->handle();
+
+        // TODO: chamando o repositorio direto na controller, fugindo do padrao, nesse caso aqui deveria ser
+        // useCases/Company/Update (useCase) -> Domains\Company\Update (Domain) -> Repositories\Company\Update 
+        // e a função useCases/Company/Update->handle() deveria retornar o company atualizado
+        // assim evitando a necessidade de fazer uma nova consulta no banco que ocorre na linha 61 
         (new CompanyUpdate($dominio))->handle();
 
         $resposta = Company::find(Auth::user()->company_id)->first()->toArray();

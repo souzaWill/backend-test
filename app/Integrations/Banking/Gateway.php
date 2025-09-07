@@ -60,7 +60,7 @@ class Gateway
         $responseDatetime = Carbon::now();
 
         $code = $response->status();
-        $body = 'Log Desativado';
+        $body = 'Log Desativado';//why
 
         if ($logActive) {
             $body = $response->json() ?? $response->body();
@@ -94,6 +94,7 @@ class Gateway
             return $response;
         }
 
+        //TODO: createLog e chamado 3x, com parametros quase iguais, talvez o ideal seria criar um default e ir sobrescrevendo o que for diferente
         $this->createLog(
             description:      'Sucesso ao enviar request para a BaaS',
             action:           "GATEWAY_BANKING_REQUEST_CALL_{$action}_SUCCESS",
@@ -132,6 +133,8 @@ class Gateway
      */
     public function generateAuthenticationToken(): void
     {
+        //TODO: usaria o Cache::remember('key', ttl, callback), pois com ele e possivel buscar o item na cache, caso nao exista ele busca o item e ja seta na cache
+        // mas so por conveniência, pois o código atual funciona
         $token = Cache::get('banking_authentication_token');
 
         if ($token !== null) {

@@ -78,6 +78,7 @@ class Create extends BaseDomain
      */
     protected function cryptPassword(string $password): void
     {
+        // TODO: remover a função de hash direta, usar injeção de dependência ex: bind PasswordHasherInterface -> LaravelPasswordHasher 
         $this->password = Hash::make($password);
     }
 
@@ -89,6 +90,7 @@ class Create extends BaseDomain
     protected function checkEmail(): void
     {
         if (!(new CanUseEmail($this->email))->handle()) {
+            // TODO: Criar uma exception especifica para email já vinculado
             throw new InternalErrorException(
                 'Não é possível adicionar o E-mail informado',
                 0
@@ -103,7 +105,9 @@ class Create extends BaseDomain
      */
     protected function checkDocumentNumber(): void
     {
+        // TODO: 
         if (!(new CanUseDocumentNumber($this->documentNumber))->handle()) {
+            // TODO: Criar uma exception específica para documento já vinculado
             throw new InternalErrorException(
                 'Não é possível adicionar o CPF informado',
                 0
@@ -118,7 +122,9 @@ class Create extends BaseDomain
      */
     protected function checkType(): void
     {
+        // usar enum com os tipos permitidos ['USER', 'VIRTUAL', 'MANAGER']
         if (!in_array($this->type, ['USER', 'VIRTUAL', 'MANAGER'])) {
+            // TODO: Criar uma exception específica para tipo inválido
             throw new InternalErrorException(
                 'Não é possível adicionar o tipo informado',
                 0

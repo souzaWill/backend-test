@@ -5,6 +5,9 @@ namespace App\Http\Middleware\App;
 use Closure;
 use App\Traits\ResponseHelpers;
 
+//TODO: acho que o laravel ja tem algo nativo que faz isso, reinventar a roda as vezes não é a melhor ideia, mas depende de entender as reais necessidades
+//TODO: ->middleware('can:view,user'); ou a cada controller usar $this->authorizeResource(User::class, 'user'); no construtor
+
 /**
  * Middleware para validar políticas de acesso aos recursos,
  *
@@ -49,7 +52,9 @@ class ResourcePolicies
         $resource = str_replace('Controller', '', $resource);
 
         $method = explode('@', end($action))[1];
-
+        
+        //TODO: erros nao tratados caso a classe ou o metodo nao existam, hoje seu código vai lançar um Error genérico (Call to undefined method).
+        //TODO: conferir se deixo esse comentario
         app(self::POLICIES_NAMESPACE . '\\' . $resource)->{$method}(...$parameters);
     }
 }

@@ -89,7 +89,7 @@ class Register extends BaseUseCase
                 $th,
                 [
                     'userId' => $this->userId,
-                    'pin'    => $this->pin,
+                    'pin'    => $this->pin, //TODO: remover pin dos logs, é um dado sensível
                     'cardId' => $this->cardId,
                 ]
             );

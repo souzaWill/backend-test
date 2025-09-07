@@ -103,6 +103,7 @@ trait Logger
                 ],
             ];
 
+            //TODO: canal log_service nao existe
             Log::channel('log_service')->{$logLevel}($context['description'], $context);
         } catch (Throwable $e) {
             return [
@@ -163,6 +164,8 @@ trait Logger
             $level
         );
 
+        //TODO: não expor o stack tracing da exceção em produção, interessante verificar APP_DEBUG e true, caso sim exibir
+        // if(config('app.debug', false)) dump($exception);
         dump($exception);
 
         // Para evitar propagação de log duplicado, o erro é propagado como

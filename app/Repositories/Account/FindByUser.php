@@ -38,6 +38,9 @@ class FindByUser extends BaseRepository
      */
     public function handle(): ?array
     {
+        //TODO: usar o $this->builder o acoplamento entre a repository o eloquento fica maior ainda
+        // assim dificulta a troca de implementação, testabilidade, etc... 
+        // como solução recomendaria uma abstração dessa funcão na BaseRepository, tipo um findBy()
         $this->builder->where('user_id', $this->userId);
 
         return $this->first();

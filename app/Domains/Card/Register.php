@@ -49,14 +49,16 @@ class Register extends BaseDomain
      *
      * @return void
      */
-    protected function findAccountId(): void
+    protected function findAccountId(): void // TODO: mudar para metodo privado
     {
+        // TODO: usar injeção de dependência ao invés de instanciar diretamente
         $account = (new FindByUser($this->userId))->handle();
 
         if (is_null($account)) {
+            // TODO: Criar uma exception específica para conta não encontrada
             throw new InternalErrorException(
                 'ACCOUNT_NOT_FOUND',
-                161001001
+                161001001 // usar constante ou melhor ainda seria um uma exception específica ex: AccountNotFoundException ja definindo o codigo
             );
         }
 
@@ -66,9 +68,11 @@ class Register extends BaseDomain
     /**
      * Cartão não pode já estar vinculado
      */
-    protected function checkExternalId()
+    protected function checkExternalId(): void // TODO: mudar para metodo privado
     {
+        // TODO: usar injeção de dependência ao invés de instanciar diretamente
         if (!(new CanUseExternalId($this->cardId))->handle()) {
+            // TODO: Criar uma exception específica para cartão já vinculado
             throw new InternalErrorException(
                 'Não é possível vincular esse cartão',
                 0

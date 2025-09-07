@@ -78,8 +78,10 @@ class Retrieve extends BaseRepository
      */
     public function handle(): LengthAwarePaginator
     {
+        //TODO: evitar o whereRaw, o eloquent tem suporte a like nativamente, porem seria melhor abstrair isso na BaseRepository
         $this->leftJoinAccount();
 
+        //TODO: extrair esses filtros para uma função privada para melhorar a legibilidade
         if ($this->name) {
             $this->builder->whereRaw("name LIKE '%" . $this->name . "%'");
         }
@@ -89,6 +91,7 @@ class Retrieve extends BaseRepository
         }
 
         if ($this->status) {
+            //TODO: INACTIVE deveria ser uma constante ou um enum
             if ($this->status === 'INACTIVE') {
                 $this->builder->whereRaw('accounts.id IS NULL');
             } else {
@@ -96,6 +99,9 @@ class Retrieve extends BaseRepository
             }
         }
 
+        //TODO: usar o $this->builder o acoplamento entre a repository o eloquento fica maior ainda
+        // assim dificulta a troca de implementação, testabilidade, etc... 
+        // como solução recomendaria uma abstração dessa funcão na BaseRepository
         $this->builder->where('company_id', $this->companyId)
             ->orderBy('name');
 

@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Banking\Params\Account;
 
+//talvez devia importar BaseParams e extender a classe
 class CreateParams
 {
     /**
@@ -58,6 +59,7 @@ class CreateParams
      */
     public function getBody(): array
     {
+        //TODO: função não utilizada, talvez remover a classe
         return [
             'product_id'      => $this->productId,
             'account_type'    => $this->accountType,

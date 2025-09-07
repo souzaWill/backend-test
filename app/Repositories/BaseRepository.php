@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Repositories\Interfaces\BaseRepositoryInterface;
 
+//TODO: a implementação de repository do projeto esta muito acoplada ao Eloquent
+// isso reduz testabilidade, dificulta trocar a infra (ex.: outro ORM ou API) e mistura responsabilidades
+// o repositório deve ser uma abstração da fonte de dados (DB, API, etc) e não da ORM
 abstract class BaseRepository implements BaseRepositoryInterface
 {
     /**
