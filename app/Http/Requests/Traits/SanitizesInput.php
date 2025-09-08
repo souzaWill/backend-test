@@ -5,8 +5,6 @@ namespace App\Http\Requests\Traits;
 use Illuminate\Support\Arr;
 
 //TODO: essa trait parece nao ser usada, ou estou errado?
-//TODO: estranho ter uma pasta Traits dentro de Requests, talvez fosse melhor em App/Traits
-//TODO: verificar se eu estou certo kkkkk
 trait SanitizesInput
 {
     /**
