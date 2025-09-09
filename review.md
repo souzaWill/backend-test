@@ -509,7 +509,7 @@ e o codigo assim:
 ```php
 public function handle(): bool
 {
-	return $this->builder
+	return !$this->builder
 		->where('external_id', $this->externalId)
 		->exists(); 
 }
