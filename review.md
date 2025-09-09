@@ -690,7 +690,7 @@ class Create extends BaseDomain
 */
 public function index(IndexRequest $request): JsonResponse
 {
-	//o nome do dominio Index me parece estranho para um caso de uso, talvez ListUsers ou ListUser seja mais apropriado
+    //TODO: o nome Index me parece estranho para um caso de uso, talvez ListUsers ou ListUser seja mais apropriado
 	$response = (new Index( 
 		Auth::user()->company_id,
 		$request->name,
