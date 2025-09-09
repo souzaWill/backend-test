@@ -372,7 +372,7 @@ class AccountNotFoundException extends BaseException
 
 ```
 ### Observação:
-o ideal seria o uso de enums porem o projeto usa php 8.1, funcionariam melhor para pegar a $message tambem 
+o ideal seria o uso de enums porem o projeto usa php 8.0, funcionariam melhor para pegar a $message tambem 
 ### Ocorrencias:
 
 - app/Domains/Card/Register.php (linhas 58, 75)
