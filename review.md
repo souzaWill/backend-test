@@ -3,30 +3,54 @@
 ## 1. Injeção de dependência ausente / Instanciação direta
 No projeto falta o uso de injeção de dependência, está sendo instanciado as classes concretas ao inves de uma interface, com isso quebrando o Princípio da Inversão de Dependência (DIP) 
 ```php
-//trecho de codigo da app/Domains/Card/Register.php
-use App\Repositories\Account\FindByUser;
-
-$account = (new FindByUser($this->userId))->handle();
+//app/UseCases/Card/Register.php
+/**
+     * Registra no banco de dados
+     *
+     * @return void
+     */
+    protected function store(RegisterDomain $domain): void
+    {
+        (new Create($domain))->handle();
+    }
 
 ```
 ### Sugestão de solução:
-1. Crie uma interface para a repository (ex: FindByUserInterface):
+1. ao inves de instanciar a classe concreta da repository, utilizar injeção de dependencia, preferencialmente utilizando interfaces 
 ```php
 <?php
+namespace App\UseCases\Card;
 
-namespace App\Repositories\Account;
+use App\Repositories\Card\CreateCardRepositoryInterface;
 
-interface FindByUserInterface
+class Register extends BaseUseCase
 {
-    public function handle(string $userId);
+    public function __construct(string $userId, string $pin, string $cardId, CreateCardRepositoryInterface $createCardRepositoryInterface)
+    {
+        $this->userId = $userId;
+        $this->pin    = $pin;
+        $this->cardId = $cardId;
+        $this->createCardRepositoryInterface = $createCardRepositoryInterface;
+    }
+
+    * Registra no banco de dados
+     *
+     * @return void
+     */
+    protected function store(Card $card): void
+    {
+        $createCardRepositoryInterface->handle($domain);
+    }
 }
+
+
 
 ```
 essa interface deve servir como um contrato, e não deve expor como é implementada.
 
 2. Implemente a interface na repository:
 ```php
-class FindByUser implements FindByUserInterface
+class CreateCardRepository implements CreateCardRepositoryInterface
 {
     public function handle(string $userId)
     {
@@ -35,47 +59,27 @@ class FindByUser implements FindByUserInterface
 }
 
 ```
-3. Altere o construtor da sua Domain para receber a interface:
-```php
-use App\Repositories\Account\FindByUserInterface;
 
-class Register extends BaseDomain
-{
-    protected FindByUserInterface $findByUserInterface;
-
-    public function __construct(
-        FindByUserInterface $findByUserInterface,
-        string $userId,
-        string $pin,
-        string $cardId
-    ) {
-        $this->findByUserInterface = $findByUserInterface;
-        $this->userId = $userId;
-        $this->pin    = $pin;
-        $this->cardId = $cardId;
-    }
-
-```
 4. Registrar o bind no AppServiceProvider
 ```php
 //app/Providers/AppServiceProvider.php
 
 public function register()
 {
-    $this->app->bind(FindByUserInterface::class, FindByUser::class);
+    $this->app->bind(CreateCardRepositoryInterface::class, CreateCardRepository::class);
 }
 ```
-O bind no AppServiceProvider garante que, quando a aplicação solicitar FindByUserInterface, o Laravel saiba qual implementação concreta (FindByUser) deve ser entregue automaticamente.
+O bind no AppServiceProvider garante que, quando a aplicação solicitar CreateCardRepositoryInterface, o Laravel saiba qual implementação concreta (CreateCardRepository) deve ser entregue automaticamente.
 
 ### Observação:
-Criar uma interface por método (FindByUserInterface -> FindByUser) não seria o ideal, normalmente criamos uma interface para o repositório inteiro (ex: AccountRepositoryInterface)
+Criar uma interface por método (CreateCardRepositoryInterface -> CreateCardRepository) não seria o ideal, normalmente criamos uma interface para o repositório inteiro (ex: CardRepositoryInterface)
 ```php
 namespace App\Repositories\Account;
 
-interface AccountRepositoryInterface
+interface CardRepositoryInterface
 {
     public function findByUser(string $userId);
-    public function save(array $data);
+    public function save(Card $data);
     // outros contratos
 }
 ```
@@ -200,53 +204,11 @@ class CanUseDocumentNumber extends BaseRepository
     }
 }
 ```
-
 ## Sugestão de melhoria
-afim de evitar isso de maneira paliativa sem mexer no projeto inteiro minha sugestão seria:
-1. Criar uma camada de infra com uma interface de persistência genérica
-```php
-namespace App\Infra\Persistence;
-
-interface PersistenceInterface
-{
-    public function save(array $attributes): array;
-    public function find(string $id): ?array;
-    public function update(string $id, array $attributes): array;
-    public function delete(string $id): bool;
-}
-```
-2. Criar uma implementação concreta usando Eloquent
-
-```php
-namespace App\Infra\Persistence\Eloquent;
-
-class EloquentPersistence implements PersistenceInterface
-{
-    public function __construct(protected Model $model) {}
-
-    public function save(array $attributes): array
-    {
-        return $this->model::create($attributes)
-            ->withoutRelations()
-            ->toArray();
-    }
-}
-```
-
-3. Modificar o BaseRepository para usar PersistenceInterface
-
-```php
-abstract class BaseRepository implements BaseRepositoryInterface
-{
-    public function __construct(protected PersistenceInterface $persistence) {}
-
-    public function create(array $attributes): array
-    {
-        return $this->persistence->save($attributes);
-    }
-}
-```
-
+1. Como a implementação de repositories atualmente e acoplada diretamente ao Eloquent, moveria as implementações atuais para uma pasta ```app/Repositories/Eloquent/User/CanUseDocumentNumber.php```
+2. na raiz das repositories ```app/Repositories/``` criaria interfaces que serviriam de contrato para os useCases acessarem ex: ```app/Repositories/User/CanUseDocumentNumberInterface.php```
+3. faria o bind entre a interface e a classe concreta.
+3. fosse necessario alguma chamada a repository, realizaria injeção de dependencia da mesma, usando a sua interface ao inves da classe.
 
 
 ## 3. Organização e Responsabilidade das Camadas
@@ -308,7 +270,6 @@ class Register extends BaseDomain
 #### Problemas identificados 
 
 - As chamadas aos repositórios devem ser realizadas pelos UseCases correspondentes, e não pelo Domain, para evitar acoplamento dessa camada com a infraestrutura ou APIs.
-- com isso essa chamada de repository deveria ser orquestrada pela domain
 - tambem deveria ser usado injeção de dependências FindByUser e CanUseExternalId no método construtor ou no handle
 
 ### app/Domains/Card/Register.php
